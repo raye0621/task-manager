@@ -1,13 +1,9 @@
-import { useState } from 'react'
-import './App.css'
+import TaskListPage from './pages/TaskListPage';
 
 function App() {
-
   return (
-    <>
-      <div>App.tsx</div>
-    </>
-  )
+    <TaskListPage />
+  );
 }
 
-export default App
+export default App;
