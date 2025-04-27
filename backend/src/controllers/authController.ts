@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config(); // 保險起見，確保此檔案也會載入 .env
+
 // src/controllers/authController.ts
 import { Request, Response } from 'express';
 import User from '../models/user';
@@ -11,13 +14,13 @@ export const login = async (req: Request, res: Response) => {
 
   try {
     const user = await User.findOne({ where: { email } });
-
+    console.log('🧩 查詢結果 user:', user);
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
-
+    console.log('🔐 密碼比對結果:', isPasswordValid);
     if (!isPasswordValid) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
@@ -26,6 +29,7 @@ export const login = async (req: Request, res: Response) => {
 
     res.json({ token });
   } catch (err) {
-    res.status(500).json({ message: 'Login failed', error: err });
+    console.error('❌ Login error:', err); 
+    res.status(500).json({ message: '登入錯誤！Login failed', error: err });
   }
 };
