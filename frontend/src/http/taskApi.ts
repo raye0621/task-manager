@@ -1,10 +1,14 @@
 // src/http/taskApi.ts
 import axios from 'axios';
 import { Task, TaskStatus } from '../types/task';
+import { authStore } from '../store/authStore';
 
 const API_URL = 'http://localhost:3001/tasks';
 
-const getToken = () => localStorage.getItem('token');
+const getToken = () => {
+  const token = authStore.getState().token;
+  return token;
+};
 
 export const fetchTasksApi = async () => {
   const res = await axios.get<Task[]>(API_URL, {
