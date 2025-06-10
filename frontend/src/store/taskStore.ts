@@ -9,7 +9,7 @@ import {
 } from '../http/taskApi';
 
 interface TaskState {
-  tasks: Task[];
+  formattedTasks: Record<string, Task[]>;
   loading: boolean;
   error: string | null;
   fetchTasks: () => Promise<void>;
@@ -19,7 +19,7 @@ interface TaskState {
 }
 
 export const useTaskStore = create<TaskState>((set) => ({
-  tasks: [],
+  formattedTasks: {},
   loading: false,
   error: null,
 
@@ -27,7 +27,9 @@ export const useTaskStore = create<TaskState>((set) => ({
     set({ loading: true, error: null });
     try {
       const tasks = await fetchTasksApi();
-      set({ tasks });
+      const formattedTasks = formatTasksByStatus(tasks);
+
+      set({ formattedTasks });
     } catch (err: any) {
       set({ error: err.message });
     } finally {
@@ -71,3 +73,13 @@ export const useTaskStore = create<TaskState>((set) => ({
     }
   },
 }));
+
+function formatTasksByStatus(tasks: Task[]): Record<string, Task[]> {
+  return tasks.reduce((acc, task) => {
+    if (!acc[task.status]) {
+      acc[task.status] = [];
+    }
+    acc[task.status].push(task);
+    return acc;
+  }, {} as Record<string, Task[]>);
+}
