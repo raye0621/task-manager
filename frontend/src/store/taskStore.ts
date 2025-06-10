@@ -1,6 +1,6 @@
 // src/store/taskStore.ts
 import { create } from 'zustand';
-import { Task, TaskStatus } from '../types/task';
+import { Task } from '../types/task';
 import {
   fetchTasksApi,
   createTaskApi,
@@ -14,7 +14,7 @@ interface TaskState {
   error: string | null;
   fetchTasks: () => Promise<void>;
   addTask: (task: Partial<Task>) => Promise<void>;
-  updateTaskStatus: (taskId: number, status: TaskStatus) => Promise<void>;
+  updateTaskStatus: (taskId: number, status: string) => Promise<void>;
   deleteTask: (taskId: number) => Promise<void>;
 }
 
